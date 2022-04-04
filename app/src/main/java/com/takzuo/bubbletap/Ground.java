@@ -20,6 +20,8 @@ import java.util.Random;
 public class Ground extends View {
 
     int velocity = StartUp.preferences.getInt("speed", 20 );
+    private SoundPlayer sound;
+
     Context context;
     Bitmap meduimlevel, life1, life2, life3, life4, life5;
     Handler handler;
@@ -64,6 +66,7 @@ public class Ground extends View {
         gramawall = new Gramawall(context);
         canyon = new Canyon(context);
         handler = new Handler();
+        sound = new SoundPlayer(context);
         meduimlevel = BitmapFactory.decodeResource(context.getResources(), R.drawable.finaleasy, null);
         life1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.life1, null);
         life2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.life2, null);
@@ -158,6 +161,7 @@ public class Ground extends View {
             canvas.drawBitmap(enemyBobbles.get(i).getBooble(), enemyBobbles.get(i).shx, enemyBobbles.get(i).shy, null);
 
             if((enemyBobbles.get(i).shy + 50 > lax )){
+
                 life--;
                 explosion = new Explosion(context, enemyBobbles.get(i).shx, enemyBobbles.get(i).shy);
                 enemyBobbles.remove(i);
@@ -175,6 +179,7 @@ public class Ground extends View {
                     }else{
                        canyon.canyonvelocity -= 5;
                     }
+
                 bobblevelocity+=2;
                 points++;
                 explosions.add(explosion);
@@ -189,7 +194,7 @@ public class Ground extends View {
         // Explosion
         for(int i=0; i < explosions.size(); i++){
             canvas.drawBitmap(explosions.get(i).getExplosion(explosions.get(i).explosionFrame), explosions.get(i).eX, explosions.get(i).eY, null);
-
+            sound.playBubblingSound();
             explosions.get(i).explosionFrame++;
             if(explosions.get(i).explosionFrame > 7){
                 explosions.remove(i);
